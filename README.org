@@ -1,0 +1,86 @@
+title: Motifの活性化
+#+author: kenjirofukuda@gmail.com
+#+options: toc:nil num:nil ^:nil ^:{}
+#+HTML_HEAD_EXTRA: <style> .figure p {text-align: left;}</style>
+#+HTML_HEAD_EXTRA: <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js"></script>
+
+
+#+begin_src bash :dir (file-name-directory (buffer-file-name))
+#+end_src
+
+* Motifの活性化
+
+正直、廃れて入るが過去にプログラミングを経験したのでその独特の感覚が失われるのはもったいないと思った。
+
+うっすらとは意識していたのだが決定的に「あ、これが必要だ」と感じたきっかけがある。
+「全てがFになる」という小説のアニメ版のEDに採用されていたのだ。
+
+Motifに限らずWeb技術ばかりが残っていて、古典的な技術サイトは消えていくいくばかりでWaybackマシン頼みになる。
+だが図のリンク切れが多く資料的な意味が半減しており、残念な状況に変わりはない。
+
+手始めに、mwm をインストールして過去の体験の再学習を試みた。
+
+- 解像度の低いビットマップフォントと今日の高解像度のモニターとの相性が悪い。
+- Waylandを主軸にしてX11を廃止しようと業界が躍起になっている。
+- nedit以外、motifそのもののアプリケーションがディストリビューション上のパッケージに存在しない。
+そもそも、分が悪いのである。
+
+視認性の悪いビットマップフォントの問題は mwmをxft対応させた emwm (https://github.com/alx210/emwm) 導入で乗り切ることにした。
+emwm メンテナーによるxfileも加わり、多少は使いやすくなった。
+
+対応アプリケーションを増やしていくに当たり、マルチプラットフォーム展開しているツールをさがしたら、
+以下のような状態であった。
+
+
+| wxWidgets (wxMotif) | サポート打ち切りで事実上、使い物にならない |
+| iup（本家tecgraf）  | iupそのものが活動停止中                   |
+| iup（iup-go）       | motifに対する手厚い修正有り               |
+| 素のX11（Xm）       | プリミティブなプログラミングの再学習      |
+
+* wxWidgets (wxMotif)
+
+- https://docs.wxwidgets.org/3.2/page_port.html#page_port_wxmotif
+- https://docs.wxwidgets.org/3.2/plat_motif_install.html
+
+  #+begin_example
+wxMotifは、Motifライブラリを使用したX11システム向けのwxWidgetsの移植版です。
+現在は積極的にメンテナンスされておらず、かなり時代遅れになっています。
+  #+end_example
+との記載が有り、期待出来なさそう。
+
+* iup（tecgraf公式）
+cl-gdsfeel にて、CommonLisp のバインディング経由で使用した経緯も有り、GTKバックエンドベースでの多少の経験は有ります。
+ですので、これに期待してみました。
+
+Motif用にコンパイルしたところ
+最近コンパイルした実績がないと思えるほど古いソースコード水準な上に、クラッシュが多発します。
+
+よくよく調べてみると
+- https://sourceforge.net/p/iup/news/
+3.31バージョンの記載にあるように、これも期待できません。
+#+begin_example
+誠に申し訳ございませんが、IUPは現在停止中です。放棄されたわけではありませんが、メンテナンスはバグ修正のみに限定されています。
+チームは別のプロジェクトに配属されており、IUPへの復帰時期は未定です。
+#+end_example
+
+
+* iup（iup-go）
+- https://github.com/gen2brain/iup-go
+go のバインディングで、motifへの期待はしていませんでしたが、担当者がmotifが気に入ってくれて積極的なサポートをしています。
+かなり期待できそうです。
+
+- https://sourceforge.net/p/iup/mailman/iup-users/thread/CAOjMqADOUpdJ-_cDK8mM1PUm18fSBGg3nSmL%2B5-qNwqnZ0zKXw%40mail.gmail.com/#msg59252644
+  
+公式のメーリングリストに、 改良の貢献提案がポストされてしますが、反映の動きが有りません。
+
+公式を避難するわけでは有りませんが、活動を停止していると言っている以上、期待してはいけません。
+よってiupのコードベースは tecgrafのものを使用するよりも、gen2brain ベースのものを使用したほうが良さそうです。
+
+* 素のX11（Xm）
+
+- https://fastestcode.org/
+- https://www.ist.co.uk/motif/
+- https://www.ist.co.uk/motif/download/book_download.html
+
+今後の iup, wxMotifの改善を行うためにも基礎的な知識は必要なため、これからもプリミティブなAPIの探求も怠らず学習します。
+

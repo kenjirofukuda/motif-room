@@ -1,2 +1,0 @@
-# motif-room
-about motif
